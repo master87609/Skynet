@@ -3241,30 +3241,16 @@
   </button>
 
   <div class="nav-item active" id="navItemDashboard" onclick="showMainView('dashboard')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-    Dashboard
-  </div>
-    <div class="nav-item" id="navItemWebBuilder" onclick="showMainView('webbuilder')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-    Website Studio
-    <span class="badge" style="background:linear-gradient(135deg, #d4820a, #f5a530);color:#121316;font-weight:700;">5 AGENTS</span>
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    Search
   </div>
   <div class="nav-item" id="navItemProjects" onclick="showMainView('projects')">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6a2 2 0 012-2h3l2 2h9a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z"/></svg>
     Projects
   </div>
-  <div class="nav-item" id="navItemArtifacts" onclick="showMainView('artifacts')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="13" height="13" rx="2"/><path d="M7 7h13a2 2 0 012 2v11a2 2 0 01-2 2H9a2 2 0 01-2-2V7z"/></svg>
-    Artifacts
-  </div>
   <div class="nav-item" id="navItemCustomize" onclick="openSettings('customize')">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
     Customize
-  </div>
-  <div class="nav-item" id="navItemAnalytics" onclick="showMainView('analytics')">
-    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-    Analytics
-    <span class="badge">New</span>
   </div>
 
   <div class="section-label">
@@ -3393,162 +3379,7 @@
   </header>
 
   <!-- Projects View Screen matching image -->
-    <!-- ══════════ MULTI-AGENT WEBSITE STUDIO (Split-Screen) ══════════ -->
-  <div class="view-screen web-builder-screen" id="viewScreenWebBuilder">
-    <!-- Studio Header Bar -->
-    <div class="studio-header-bar">
-      <div class="studio-header-left">
-        <div class="studio-logo-badge">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        </div>
-        <div>
-          <div class="studio-title">Multi-Agent Website Studio</div>
-          <div class="studio-subtitle">5 Autonomous Agents: Architect • Copywriter • Designer • Coder • QA</div>
-        </div>
-      </div>
-
-      <!-- Viewport & Export Controls -->
-      <div class="studio-header-actions">
-        <div class="studio-device-toggle">
-          <button class="device-btn active" id="btnDeviceDesktop" onclick="setDeviceMode('desktop')" title="Desktop View (100%)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </button>
-          <button class="device-btn" id="btnDeviceTablet" onclick="setDeviceMode('tablet')" title="Tablet View (768px)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          </button>
-          <button class="device-btn" id="btnDeviceMobile" onclick="setDeviceMode('mobile')" title="Mobile View (375px)">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          </button>
-        </div>
-
-        <div class="studio-mode-toggle">
-          <button class="mode-btn active" id="btnModePreview" onclick="setStudioView('preview')">Preview</button>
-          <button class="mode-btn" id="btnModeCode" onclick="setStudioView('code')">&lt;/&gt; Code</button>
-        </div>
-
-        <button class="studio-action-btn" onclick="copyGeneratedHtml()" title="Copy HTML">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          Copy HTML
-        </button>
-        <button class="studio-action-btn" onclick="downloadGeneratedHtml()" title="Download as index.html">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download
-        </button>
-        <button class="studio-action-btn primary" onclick="openPreviewInNewTab()" title="Open live in new tab">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Open Live
-        </button>
-      </div>
-    </div>
-
-    <!-- Studio Split Body -->
-    <div class="studio-split-body">
-      <!-- Left Pane: Agent Swarm Console (42%) -->
-      <div class="studio-left-pane">
-        <div class="agents-roster-title">Integrated Agent Swarm</div>
-        <div class="agents-roster-grid">
-          <!-- 1. Architect -->
-          <div class="agent-chip" id="chipArchitect">
-            <div class="agent-avatar">📐</div>
-            <div class="agent-meta">
-              <div class="agent-name">Architect</div>
-              <div class="agent-role" id="statusArchitect">Idle</div>
-            </div>
-            <div class="agent-pulse" id="pulseArchitect"></div>
-          </div>
-
-          <!-- 2. Copywriter -->
-          <div class="agent-chip" id="chipCopywriter">
-            <div class="agent-avatar">✍️</div>
-            <div class="agent-meta">
-              <div class="agent-name">Copywriter</div>
-              <div class="agent-role" id="statusCopywriter">Idle</div>
-            </div>
-            <div class="agent-pulse" id="pulseCopywriter"></div>
-          </div>
-
-          <!-- 3. Designer -->
-          <div class="agent-chip" id="chipDesigner">
-            <div class="agent-avatar">🎨</div>
-            <div class="agent-meta">
-              <div class="agent-name">Designer</div>
-              <div class="agent-role" id="statusDesigner">Idle</div>
-            </div>
-            <div class="agent-pulse" id="pulseDesigner"></div>
-          </div>
-
-          <!-- 4. Coder -->
-          <div class="agent-chip" id="chipCoder">
-            <div class="agent-avatar">💻</div>
-            <div class="agent-meta">
-              <div class="agent-name">Frontend Coder</div>
-              <div class="agent-role" id="statusCoder">Idle</div>
-            </div>
-            <div class="agent-pulse" id="pulseCoder"></div>
-          </div>
-
-          <!-- 5. QA Reviewer -->
-          <div class="agent-chip" id="chipQA" style="grid-column: span 2;">
-            <div class="agent-avatar">🔍</div>
-            <div class="agent-meta">
-              <div class="agent-name">QA Reviewer Agent</div>
-              <div class="agent-role" id="statusQA">Idle</div>
-            </div>
-            <div class="agent-pulse" id="pulseQA"></div>
-          </div>
-        </div>
-
-        <!-- Terminal Log -->
-        <div class="agent-terminal-card">
-          <div class="terminal-header">
-            <span>Agent Collaboration Stream</span>
-            <span class="terminal-badge" id="terminalBadge">Ready</span>
-          </div>
-          <div class="terminal-logs" id="agentTerminalLogs">
-            <div class="log-line text-muted">Ready. Choose a template below or enter your website prompt...</div>
-          </div>
-        </div>
-
-        <!-- Prompt Controls -->
-        <div class="agent-prompt-container">
-          <div class="quick-website-templates">
-            <button class="quick-tpl-btn" onclick="setQuickPrompt('Modern AI SaaS landing page with dark glassmorphism, pricing table, and testimonials')">⚡ AI SaaS</button>
-            <button class="quick-tpl-btn" onclick="setQuickPrompt('Creative developer & designer portfolio with project gallery, stats, and contact form')">🎨 Portfolio</button>
-            <button class="quick-tpl-btn" onclick="setQuickPrompt('Luxury artisan restaurant & cafe website with curated menu, reservations, and chef story')">🍽️ Restaurant</button>
-            <button class="quick-tpl-btn" onclick="setQuickPrompt('Minimalist e-commerce storefront with featured products, cart drawer, and review cards')">🛍️ E-Commerce</button>
-          </div>
-
-          <div class="studio-input-wrap">
-            <textarea id="agentWebsiteInput" class="studio-textarea" rows="2" placeholder="Describe the website you want the agents to build..."></textarea>
-            <div class="studio-input-actions">
-              <span class="studio-hint">All 5 agents will collaborate</span>
-              <button class="btn-build-site" id="btnBuildSite" onclick="runWebsiteAgents()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                <span>Build with Agents</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Refinement Controller -->
-          <div class="studio-refine-wrap" id="studioRefineWrap" style="display:none;">
-            <input type="text" id="refineInput" class="studio-refine-input" placeholder="Ask agents to modify (e.g. 'Make hero darker', 'Add contact modal')..."/>
-            <button class="studio-refine-btn" onclick="refineWebsiteWithAgents()">Refine</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Pane: Live Iframe + Code Viewer (58%) -->
-      <div class="studio-right-pane">
-        <div class="preview-viewport-wrapper" id="previewViewportWrapper">
-          <iframe id="websitePreviewFrame" class="preview-iframe" title="Website Live Preview"></iframe>
-        </div>
-
-        <div class="code-viewport-wrapper" id="codeViewportWrapper" style="display:none;">
-          <pre class="code-pre"><code id="codeViewerText"></code></pre>
-        </div>
-      </div>
-    </div>
-  </div>
+    
   <div class="view-screen" id="viewScreenProjects">
     <div class="view-header">
       <div class="view-title">Projects</div>
@@ -3569,41 +3400,6 @@
       <div class="projects-empty-title">Looking to start a project?</div>
       <div class="projects-empty-desc">Upload materials, set custom instructions, and organize conversations in one space.</div>
       <button class="s-btn s-btn-primary" onclick="alert('Creating new project workspace...')">New project</button>
-    </div>
-  </div>
-
-  <!-- Artifacts View Screen matching image -->
-  <div class="view-screen" id="viewScreenArtifacts">
-    <div class="view-header">
-      <div class="view-title">Artifacts</div>
-      <div class="view-actions">
-        <button class="view-icon-btn" title="Search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
-        <button class="view-icon-btn" title="Filter"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></button>
-        <button class="view-icon-btn" title="List/Grid"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg></button>
-        <button class="s-btn s-btn-primary" onclick="openCreatePluginModal()">+ Create</button>
-      </div>
-    </div>
-    <div class="artifacts-subbar">
-      <div class="artifact-tabs">
-        <button class="art-filter-pill active">All</button>
-        <button class="art-filter-pill">Yours</button>
-        <button class="art-filter-pill">Shared with you</button>
-      </div>
-    </div>
-    <div style="font-size:13px;color:#8a94b0;font-weight:500;">Make something new</div>
-    <div class="artifact-cards-row">
-      <div class="art-create-card art-card-docs" onclick="sendPrompt('Draft a comprehensive documentation file for SKYNET')">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        <span class="art-card-label">Docs</span>
-      </div>
-      <div class="art-create-card art-card-slides" onclick="sendPrompt('Generate a 5-slide pitch presentation for an AI platform')">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        <span class="art-card-label">Slides</span>
-      </div>
-      <div class="art-create-card art-card-design" onclick="sendPrompt('Create an interactive SVG design system and UI layout')">
-        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="8" r="2"/><circle cx="8" cy="14" r="2"/><circle cx="16" cy="14" r="2"/></svg>
-        <span class="art-card-label">Design</span>
-      </div>
     </div>
   </div>
 
@@ -3653,11 +3449,6 @@
 
     <!-- Quick action pills -->
     <div class="quick-actions" id="quickActions">
-      <button class="pill-btn" onclick="showMainView('webbuilder')" style="border-color:rgba(245,165,48,0.35);color:#f5a530;">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-        Website Studio (5 Agents)
-      </button>
-
       <button class="pill-btn" onclick="sendPrompt('Help me write an essay on artificial intelligence')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Write
@@ -4396,22 +4187,16 @@ function showMainView(view) {
 
   const heroArea = document.getElementById('heroArea');
   const searchWrap = document.getElementById('searchWrap');
-  const chatArea = document.getElementById('chatArea');
 
   if (view === 'dashboard') {
     document.getElementById('navItemDashboard')?.classList.add('active');
-    heroArea.style.display = 'flex';
-    searchWrap.style.display = 'block';
+    if (heroArea) heroArea.style.display = 'flex';
+    if (searchWrap) searchWrap.style.display = 'block';
   } else if (view === 'projects') {
     document.getElementById('navItemProjects')?.classList.add('active');
     document.getElementById('viewScreenProjects')?.classList.add('active');
-    heroArea.style.display = 'none';
-    searchWrap.style.display = 'none';
-  } else if (view === 'artifacts') {
-    document.getElementById('navItemArtifacts')?.classList.add('active');
-    document.getElementById('viewScreenArtifacts')?.classList.add('active');
-    heroArea.style.display = 'none';
-    searchWrap.style.display = 'none';
+    if (heroArea) heroArea.style.display = 'none';
+    if (searchWrap) searchWrap.style.display = 'none';
   }
 }
 
