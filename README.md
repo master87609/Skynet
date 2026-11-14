@@ -1,97 +1,117 @@
-# SKYNET AI - Desktop & Web Frontend
+# SKYNET AI — Full-Stack Platform
 
-A responsive, high-performance desktop and web frontend interface for **SKYNET AI**, featuring kinetic animations, multi-conversation management, interactive skills & plugins discovery marketplace, language localizer, and tier upgrade/checkout workflows.
+A complete AI assistant platform featuring a desktop/web frontend with kinetic typography, animations, and multi-conversation management, paired with a high-performance **FastAPI** backend supporting **Google Gemini 2.0 streaming (SSE)**, **PostgreSQL** relational data, **MongoDB** message logs, **Google OAuth2** authentication, and tier subscriptions.
 
 ---
 
-## 🚀 Quick Start for Backend Integration
+## 🏛️ System Architecture
 
-### 1. Running the Frontend Locally
-You can serve this frontend using any static file server or bundler:
+```
+Skynet/
+├── index.html                  # Production Frontend Application (SPA)
+├── backend/                    # FastAPI Backend Service
+│   ├── app/
+│   │   ├── api/                # API Endpoints
+│   │   │   ├── auth.py         # Google OAuth2 + Email (Host Trial) JWT login
+│   │   │   ├── chat.py         # Streaming (SSE) & standard chat with Gemini
+│   │   │   ├── conversations.py# Conversation CRUD & message history
+│   │   │   ├── billing.py      # Plan subscription & upgrade/downgrade
+│   │   │   ├── users.py        # Profile view and update
+│   │   │   └── deps.py         # JWT authentication dependency
+│   │   ├── core/               # App configuration & DB connections
+│   │   │   ├── config.py       # Pydantic environment settings (.env)
+│   │   │   ├── database.py     # PostgreSQL AsyncSession (SQLAlchemy)
+│   │   │   ├── mongo.py        # MongoDB Async Motor client
+│   │   │   └── security.py     # JWT token creation & verification
+│   │   ├── models/             # Database ORM Models
+│   │   │   └── pg_models.py    # Users, Conversations, Subscriptions
+│   │   ├── schemas/            # Pydantic Schemas (validation)
+│   │   │   └── schemas.py      # Request/response contracts
+│   │   ├── services/           # Business logic layer
+│   │   │   ├── auth_service.py # Google token validation + user upsert
+│   │   │   ├── gemini_service.py # Gemini 2.0 streaming & completion
+│   │   │   ├── conversation_service.py # PostgreSQL conversation CRUD
+│   │   │   └── message_service.py # MongoDB high-throughput chat storage
+│   │   └── main.py             # FastAPI entry point & CORS configuration
+│   ├── requirements.txt        # Python backend dependencies
+│   ├── .env.example            # Environment variables template
+│   └── README.md               # Backend-specific documentation
+├── README.md                   # Project overview & quickstart
+└── .gitignore
+```
+
+---
+
+## 🚀 Quickstart
+
+### 1. Start the Backend (FastAPI)
 
 ```bash
-# Python
+cd backend
+
+# Create virtual environment
+python -m venv venv
+venv\Scripts\activate       # Windows
+# source venv/bin/activate  # macOS / Linux
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure environment
+copy .env.example .env      # Windows
+# cp .env.example .env      # macOS / Linux
+# Fill in your GEMINI_API_KEY, POSTGRES_URL, MONGO_URL, etc.
+
+# Run server
+uvicorn app.main:app --reload --port 8000
+```
+
+* **Interactive API Docs (Swagger):** `http://localhost:8000/docs`
+* **Alternative API Docs (ReDoc):** `http://localhost:8000/redoc`
+
+---
+
+### 2. Start the Frontend
+
+From the repository root:
+
+```bash
+# Using Python built-in server
 python -m http.server 8080
 
-# Or Node.js (npx)
-npx serve .
+# Or using npx serve
+npx serve -l 8080
 ```
 
-Open `http://localhost:8080` in your browser.
+Open `http://localhost:8080` in your web browser.
 
 ---
 
-## 🔌 Backend Integration Guide
+## 🔌 API Endpoints Summary
 
-This frontend is designed for straightforward plug-and-play integration with your backend API services (FastAPI, Express, Django, Flask, Go, etc.).
-
-### 1. Chat & Inference API (`/api/chat`)
-* **Client Function:** `handleSend()` in `index.html`
-* **Suggested Backend Endpoint:** `POST /api/chat` or `WebSocket /ws/chat`
-* **Request Payload Contract:**
-  ```json
-  {
-    "conversation_id": "conv-1731520000000",
-    "message": "Hi, how can I help you today?",
-    "model": "haiku-5.5",
-    "user_email": "user@example.com",
-    "stream": true
-  }
-  ```
-* **Streaming Response:** Server-Sent Events (SSE) or WebSocket packets:
-  ```json
-  {
-    "event": "token",
-    "text": "Hello! "
-  }
-  ```
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/auth/google` | Login/signup via Google OAuth2 ID Token |
+| `POST` | `/api/auth/email` | Instant Email login (Host Trial phase) |
+| `POST` | `/api/auth/refresh` | Refresh expired JWT access token |
+| `GET` | `/api/users/me` | Fetch active user profile and subscription |
+| `PATCH`| `/api/users/me` | Update display name or avatar |
+| `POST` | `/api/chat/stream` | Server-Sent Events (SSE) streaming chat via Gemini |
+| `POST` | `/api/chat/send` | Synchronous JSON chat response |
+| `GET` | `/api/conversations` | List user conversation threads |
+| `POST` | `/api/conversations` | Create new conversation |
+| `GET` | `/api/conversations/{id}/messages` | Retrieve conversation message history |
+| `DELETE`| `/api/conversations/{id}` | Delete conversation and related messages |
+| `POST` | `/api/billing/subscribe` | Activate or upgrade subscription (Pro/Max/Ultra) |
+| `GET` | `/api/billing/subscription` | Get current active subscription details |
 
 ---
 
-### 2. Authentication API (`/api/auth`)
-* **Client Functions:** `applyUserCredentials()`, `performGoogleLogin()`, `performEmailLogin()`
-* **Supported Methods:**
-  - Google OAuth / Gmail SSO: `POST /api/auth/google` (exchanges Google auth token for backend session JWT).
-  - Email Magic Link / Host Trial: `POST /api/auth/email`
-* **Session Storage:** Persisted locally via `localStorage.getItem('claude_user_session')`.
+## 🗄️ Database Strategy
 
----
-
-### 3. Subscription & Checkout (`/api/billing`)
-* **Client Function:** `executePaymentFlow()`
-* **Backend Webhook / Route:** `POST /api/billing/subscribe`
-* **Payload:**
-  ```json
-  {
-    "plan": "Pro",
-    "currency": "INR",
-    "amount": 2399,
-    "payment_method": "upi" | "card" | "netbanking"
-  }
-  ```
-
----
-
-### 4. Conversation History & Persistence (`/api/conversations`)
-* **Client System:** `conversations` array and `activeChatId`
-* **Routes to Implement:**
-  - `GET /api/conversations`: Returns list of past chats.
-  - `POST /api/conversations`: Creates a new session.
-  - `GET /api/conversations/:id`: Fetches message thread.
-  - `DELETE /api/conversations/:id`: Deletes or archives chat.
-
----
-
-### 5. Skills & Plugins Marketplace (`/api/plugins`)
-* **Client View:** `Categories` grid in Settings -> Customize.
-* **Suggested Route:** `GET /api/plugins/categories` and `GET /api/plugins/search?q=...`
-
----
-
-## 📁 Repository Structure
-```
-skynet-ui/
-├── index.html        # Main standalone single-page application
-├── README.md         # Architecture and backend integration guide
-└── .gitignore        # Git ignore rules
-```
+* **PostgreSQL (Structured Relational Data):**
+  * `users`: Profiles, OAuth IDs, active plans, host privileges.
+  * `conversations`: Conversation titles, creation dates, assigned model.
+  * `subscriptions`: Plan tier, payment method, validity periods.
+* **MongoDB (High-Velocity Document Storage):**
+  * `messages`: Message payloads, roles (`user`, `assistant`), token counts, and timestamps.
