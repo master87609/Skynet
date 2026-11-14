@@ -3025,6 +3025,154 @@
     line-height: 1.5;
   }
 
+
+  /* ══════════ AI MODEL SWITCHER POPOVER ══════════ */
+  .model-picker-wrapper {
+    position: relative;
+    display: inline-block;
+  }
+  .model-pill-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #1e1f26;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11.5px;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+  .model-pill-tag:hover {
+    background: #272832;
+    border-color: rgba(255,255,255,0.18);
+    color: #ffffff;
+  }
+  .model-pill-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+  }
+  .model-speed {
+    background: rgba(255,255,255,0.08);
+    color: #8a94b0;
+    font-size: 10px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    font-weight: 500;
+  }
+  .model-menu-popover {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    width: 320px;
+    background: #16171d;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 14px;
+    padding: 10px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.75);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(6px) scale(0.98);
+    transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .model-menu-popover.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  .model-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 6px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 12px;
+    font-weight: 600;
+    color: #f0f2f5;
+  }
+  .model-menu-sub {
+    font-size: 10.5px;
+    color: #717b96;
+    font-weight: normal;
+  }
+  .model-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .model-option-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 9px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+    transition: all 0.15s ease;
+  }
+  .model-option-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .model-option-item.active {
+    background: rgba(245, 165, 48, 0.08);
+    border-color: rgba(245, 165, 48, 0.35);
+  }
+  .model-opt-icon {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    background: #1f2028;
+    flex-shrink: 0;
+  }
+  .model-opt-info {
+    flex: 1;
+    min-width: 0;
+  }
+  .model-opt-title {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #f0f2f5;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .model-opt-desc {
+    font-size: 10.5px;
+    color: #717b96;
+    line-height: 1.3;
+    margin-top: 1px;
+  }
+  .model-check {
+    color: #f5a530;
+    font-size: 13px;
+    font-weight: bold;
+    display: none;
+  }
+  .model-option-item.active .model-check {
+    display: block;
+  }
+  .badge-speed {
+    font-size: 9.5px;
+    padding: 1px 5px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  .badge-speed.fast { background: rgba(16, 185, 129, 0.18); color: #10b981; }
+  .badge-speed.deep { background: rgba(59, 130, 246, 0.18); color: #60a5fa; }
+  .badge-speed.smart { background: rgba(245, 165, 48, 0.18); color: #f5a530; }
+  .badge-speed.omni { background: rgba(168, 85, 247, 0.18); color: #c084fc; }
+  
 </style>
 </head>
 <body>
@@ -4705,6 +4853,70 @@ function openPreviewInNewTab() {
   const url = URL.createObjectURL(blob);
   window.open(url, '_blank');
 }
+
+
+/* ══════════ AI MODEL SWITCHER LOGIC ══════════ */
+let currentSelectedAiModel = 'gemini-2.0-flash-exp';
+
+function toggleModelMenu(e) {
+  if (e) e.stopPropagation();
+  const popover = document.getElementById('modelMenuPopover');
+  popover?.classList.toggle('open');
+}
+
+function closeModelMenu() {
+  document.getElementById('modelMenuPopover')?.classList.remove('open');
+}
+
+function selectAiModel(modelId, displayName, speedTag, element) {
+  currentSelectedAiModel = modelId;
+
+  // Update button in UI
+  const nameEl = document.getElementById('activeModelName');
+  const badgeEl = document.getElementById('activeModelBadge');
+  if (nameEl) nameEl.textContent = displayName;
+  if (badgeEl) badgeEl.textContent = speedTag;
+
+  // Update checkmark state
+  document.querySelectorAll('.model-option-item').forEach(el => el.classList.remove('active'));
+  element?.classList.add('active');
+
+  // Save to localStorage
+  localStorage.setItem('skynet_active_model', JSON.stringify({ id: modelId, name: displayName, speed: speedTag }));
+
+  closeModelMenu();
+  console.log('Switched AI model to:', displayName, '(' + modelId + ')');
+}
+
+// Close model menu when clicking outside
+document.addEventListener('click', (e) => {
+  const popover = document.getElementById('modelMenuPopover');
+  const btn = document.getElementById('modelPillBtn');
+  if (popover && popover.classList.contains('open')) {
+    if (!popover.contains(e.target) && !btn?.contains(e.target)) {
+      closeModelMenu();
+    }
+  }
+});
+
+// Restore saved model on load
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = localStorage.getItem('skynet_active_model');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      currentSelectedAiModel = parsed.id || 'gemini-2.0-flash-exp';
+      const nameEl = document.getElementById('activeModelName');
+      const badgeEl = document.getElementById('activeModelBadge');
+      if (nameEl && parsed.name) nameEl.textContent = parsed.name;
+      if (badgeEl && parsed.speed) badgeEl.textContent = parsed.speed;
+      document.querySelectorAll('.model-option-item').forEach(el => {
+        if (el.getAttribute('data-model') === currentSelectedAiModel) el.classList.add('active');
+        else el.classList.remove('active');
+      });
+    }
+  } catch (err) {}
+});
 
 </script>
 
