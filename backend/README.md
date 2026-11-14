@@ -2,6 +2,7 @@
 
 A production-ready **FastAPI** backend for the SKYNET AI platform, featuring:
 
+- 🌐 **Multi-Agent Website Builder Team** (5 Collaborative Agents: Architect, Copywriter, Designer, Coder, QA)
 - 🤖 **AI Chat** (Google Gemini 2.0 Flash — streaming SSE + standard JSON)
 - 🔐 **Authentication** (Google OAuth2 + Email/Host Trial via JWT)
 - 💬 **Conversation History** (PostgreSQL metadata + MongoDB message logs)
@@ -15,6 +16,7 @@ A production-ready **FastAPI** backend for the SKYNET AI platform, featuring:
 skynet-backend/
 ├── app/
 │   ├── api/
+│   │   ├── agents.py         # POST /api/agents/website/build, /refine, /download
 │   │   ├── auth.py           # POST /api/auth/google, /email, /refresh
 │   │   ├── chat.py           # POST /api/chat/stream, /send
 │   │   ├── conversations.py  # CRUD /api/conversations
@@ -31,6 +33,7 @@ skynet-backend/
 │   ├── schemas/
 │   │   └── schemas.py        # Pydantic request/response models
 │   ├── services/
+│   │   ├── website_agent_team.py # 5-Agent Collaborative Website Studio
 │   │   ├── auth_service.py      # Google token verify + user upsert
 │   │   ├── gemini_service.py    # Gemini streaming + non-streaming
 │   │   ├── conversation_service.py # PostgreSQL CRUD
@@ -43,19 +46,29 @@ skynet-backend/
 
 ---
 
+## 🤖 Integrated Website Builder Agent Team
+
+The backend features an autonomous multi-agent swarm:
+1. **Architect Agent:** Analyzes the prompt, determines category, design tokens, sitemap, and component hierarchy.
+2. **Copywriter Agent:** Crafts engaging headlines, benefit bullets, value propositions, and call-to-actions.
+3. **Designer Agent:** Selects the modern Tailwind color scheme, typography scales, glassmorphism, and responsive breakpoints.
+4. **Coder Agent:** Synthesizes the architecture, copy, and layout into complete, standalone, production-ready HTML5 + Tailwind CSS + Vanilla JS.
+5. **QA Reviewer Agent:** Audits mobile responsiveness, viewport configurations, and interactivity.
+
+### Agent Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/api/agents/website/build` | SSE streaming endpoint running the 5 agents with live status updates and final HTML |
+| `POST` | `/api/agents/website/refine`| Modifies specific sections based on user feedback |
+| `POST` | `/api/agents/website/download`| Downloads the standalone `index.html` |
+
+---
+
 ## ⚡ Quick Start
 
-### 1. Prerequisites
-- Python 3.12+
-- PostgreSQL running locally (or remote URL)
-- MongoDB running locally (or MongoDB Atlas URL)
-- Google Gemini API key ([Get one here](https://makersuite.google.com/app/apikey))
-- Google OAuth2 Client ID ([Create here](https://console.cloud.google.com/apis/credentials))
-
-### 2. Setup
-
 ```bash
-cd skynet-backend
+cd backend
 
 # Create virtual environment
 python -m venv venv
@@ -68,85 +81,9 @@ pip install -r requirements.txt
 # Configure environment
 copy .env.example .env
 # Edit .env and fill in your API keys and DB URLs
-```
 
-### 3. Run the Server
-
-```bash
+# Run the Server
 uvicorn app.main:app --reload --port 8000
 ```
 
 **Docs available at:** http://localhost:8000/docs
-
----
-
-## 🔌 API Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `POST` | `/api/auth/google` | Login with Google ID token |
-| `POST` | `/api/auth/email` | Login with email (host trial) |
-| `POST` | `/api/auth/refresh` | Refresh JWT access token |
-| `GET` | `/api/users/me` | Get logged-in user profile |
-| `PATCH` | `/api/users/me` | Update name / avatar |
-| `POST` | `/api/chat/stream` | Streaming SSE chat (Gemini) |
-| `POST` | `/api/chat/send` | Standard JSON chat response |
-| `GET` | `/api/conversations` | List all conversations |
-| `POST` | `/api/conversations` | Create new conversation |
-| `GET` | `/api/conversations/{id}` | Get conversation metadata |
-| `PATCH` | `/api/conversations/{id}` | Rename or archive |
-| `DELETE` | `/api/conversations/{id}` | Delete conversation + messages |
-| `GET` | `/api/conversations/{id}/messages` | Full message history (MongoDB) |
-| `POST` | `/api/billing/subscribe` | Activate Pro/Max plan |
-| `GET` | `/api/billing/subscription` | Get current subscription |
-| `DELETE`| `/api/billing/cancel` | Cancel subscription |
-
----
-
-## 🌐 Frontend Integration
-
-### Chat streaming (from `index.html`):
-```javascript
-const response = await fetch('http://localhost:8000/api/chat/stream', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json',
-    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-  },
-  body: JSON.stringify({
-    message: "Hello SKYNET!",
-    conversation_id: activeConvId,
-    history: chatHistory,
-    stream: true
-  })
-});
-
-const reader = response.body.getReader();
-const decoder = new TextDecoder();
-while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
-  const text = decoder.decode(value);
-  // Parse SSE lines: "data: TOKEN\n\n"
-  text.split('\n').forEach(line => {
-    if (line.startsWith('data: ')) {
-      const token = line.slice(6);
-      if (token !== '[DONE]') appendToLastMessage(token);
-    }
-  });
-}
-```
-
----
-
-## 🗄️ Database Design
-
-### PostgreSQL (`skynet_db`)
-- **users** — email, name, avatar, google_id, plan, is_host
-- **conversations** — user_id, title, model, is_archived
-- **subscriptions** — user_id, plan, billing_cycle, payment_method, amount_inr
-
-### MongoDB (`skynet_logs`)
-- **messages** — conversation_id, user_id, role, content, model, tokens, created_at
-
-> Tables are auto-created on first startup via SQLAlchemy.

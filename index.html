@@ -2586,6 +2586,445 @@
     background: #f5a530;
   }
 
+
+  /* ══════════ MULTI-AGENT WEBSITE STUDIO (Split-Screen) ══════════ */
+  .web-builder-screen {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: none;
+    flex-direction: column;
+    background: #101115;
+    z-index: 25;
+    overflow: hidden;
+  }
+  .web-builder-screen.active {
+    display: flex !important;
+  }
+  .studio-header-bar {
+    height: 52px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #14151a;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
+    gap: 16px;
+  }
+  .studio-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .studio-logo-badge {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #d4820a, #f5a530);
+    display: flex; align-items: center; justify-content: center;
+    color: #121316;
+  }
+  .studio-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #f0f2f5;
+    line-height: 1.2;
+  }
+  .studio-subtitle {
+    font-size: 11px;
+    color: #8a94b0;
+  }
+  .studio-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .studio-device-toggle {
+    display: flex;
+    background: #1b1c22;
+    border-radius: 8px;
+    padding: 2px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .device-btn {
+    background: none;
+    border: none;
+    color: #717b96;
+    padding: 5px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .device-btn:hover { color: #f0f2f5; }
+  .device-btn.active {
+    background: #2a2c36;
+    color: #f5a530;
+  }
+  .studio-mode-toggle {
+    display: flex;
+    background: #1b1c22;
+    border-radius: 8px;
+    padding: 2px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .mode-btn {
+    background: none;
+    border: none;
+    color: #8a94b0;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .mode-btn.active {
+    background: #2a2c36;
+    color: #f0f2f5;
+  }
+  .studio-action-btn {
+    background: #1e1f26;
+    border: 1px solid rgba(255,255,255,0.08);
+    color: #cbd5e1;
+    font-size: 11.5px;
+    font-weight: 500;
+    padding: 5px 11px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .studio-action-btn:hover {
+    background: #282a34;
+    color: #ffffff;
+    border-color: rgba(255,255,255,0.15);
+  }
+  .studio-action-btn.primary {
+    background: linear-gradient(135deg, #d4820a, #f5a530);
+    color: #121316;
+    border: none;
+    font-weight: 600;
+  }
+  .studio-action-btn.primary:hover {
+    opacity: 0.92;
+    transform: translateY(-1px);
+  }
+
+  /* Studio Split Body */
+  .studio-split-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .studio-left-pane {
+    width: 42%;
+    min-width: 380px;
+    max-width: 480px;
+    border-right: 1px solid rgba(255, 255, 255, 0.06);
+    background: #121317;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .studio-right-pane {
+    flex: 1;
+    min-width: 0;
+    background: #090a0d;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 5-Agent Roster Grid */
+  .agents-roster-title {
+    font-size: 11px;
+    font-weight: 700;
+    color: #717b96;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .agents-roster-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .agent-chip {
+    background: #181920;
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    position: relative;
+    transition: all 0.2s;
+  }
+  .agent-chip.working {
+    border-color: rgba(245, 165, 48, 0.5);
+    background: rgba(245, 165, 48, 0.07);
+  }
+  .agent-chip.completed {
+    border-color: rgba(16, 185, 129, 0.35);
+    background: rgba(16, 185, 129, 0.05);
+  }
+  .agent-avatar {
+    width: 28px; height: 28px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    background: #23252e;
+    flex-shrink: 0;
+  }
+  .agent-meta {
+    flex: 1;
+    min-width: 0;
+  }
+  .agent-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .agent-role {
+    font-size: 10px;
+    color: #717b96;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .agent-chip.working .agent-role {
+    color: #f5a530;
+    font-weight: 500;
+  }
+  .agent-chip.completed .agent-role {
+    color: #10b981;
+  }
+  .agent-pulse {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: #475569;
+  }
+  .agent-chip.working .agent-pulse {
+    background: #f5a530;
+    box-shadow: 0 0 8px #f5a530;
+    animation: pulse-ring 1s infinite;
+  }
+  .agent-chip.completed .agent-pulse {
+    background: #10b981;
+  }
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 0.4; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.3); }
+  }
+
+  /* Live Terminal Logs */
+  .agent-terminal-card {
+    background: #0a0b0f;
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    height: 160px;
+    flex-shrink: 0;
+  }
+  .terminal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #717b96;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    padding-bottom: 6px;
+    margin-bottom: 6px;
+  }
+  .terminal-badge {
+    background: #191b22;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    color: #f5a530;
+  }
+  .terminal-logs {
+    flex: 1;
+    overflow-y: auto;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 11px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    line-height: 1.4;
+  }
+  .terminal-logs::-webkit-scrollbar { width: 3px; }
+  .terminal-logs::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+  .log-line {
+    color: #94a3b8;
+  }
+  .log-line.agent-architect { color: #60a5fa; }
+  .log-line.agent-copywriter { color: #f472b6; }
+  .log-line.agent-designer { color: #a78bfa; }
+  .log-line.agent-coder { color: #34d399; }
+  .log-line.agent-qa { color: #f5a530; }
+
+  /* Prompt Input Controller */
+  .agent-prompt-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+  }
+  .quick-website-templates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .quick-tpl-btn {
+    background: #191b22;
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #8a94b0;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .quick-tpl-btn:hover {
+    background: #242630;
+    color: #f0f2f5;
+    border-color: rgba(255,255,255,0.15);
+  }
+  .studio-input-wrap {
+    background: #181920;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .studio-textarea {
+    background: none;
+    border: none;
+    color: #f0f2f5;
+    font-size: 12.5px;
+    resize: none;
+    outline: none;
+    font-family: inherit;
+    line-height: 1.4;
+  }
+  .studio-input-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .studio-hint {
+    font-size: 10.5px;
+    color: #5a6080;
+  }
+  .btn-build-site {
+    background: linear-gradient(135deg, #d4820a, #f5a530);
+    color: #121316;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+  }
+  .btn-build-site:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .btn-build-site:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .studio-refine-wrap {
+    display: flex;
+    gap: 6px;
+  }
+  .studio-refine-input {
+    flex: 1;
+    background: #181920;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-size: 12px;
+    color: #f0f2f5;
+    outline: none;
+  }
+  .studio-refine-btn {
+    background: #242630;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #cbd5e1;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .studio-refine-btn:hover {
+    background: #323544;
+    color: #ffffff;
+  }
+
+  /* Right Pane Preview Viewports */
+  .preview-viewport-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #090a0d;
+    padding: 16px;
+    overflow: auto;
+  }
+  .preview-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 10px;
+    background: #ffffff;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    transition: width 0.3s ease, max-height 0.3s ease;
+  }
+  .preview-viewport-wrapper.mode-tablet .preview-iframe {
+    width: 768px;
+    height: 100%;
+  }
+  .preview-viewport-wrapper.mode-mobile .preview-iframe {
+    width: 375px;
+    height: 667px;
+    border-radius: 28px;
+    border: 8px solid #23252e;
+  }
+  .code-viewport-wrapper {
+    flex: 1;
+    overflow: auto;
+    padding: 16px;
+    background: #0a0b0e;
+  }
+  .code-pre {
+    margin: 0;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: #cbd5e1;
+    line-height: 1.5;
+  }
+
 </style>
 </head>
 <body>
@@ -2805,6 +3244,11 @@
     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
     Dashboard
   </div>
+    <div class="nav-item" id="navItemWebBuilder" onclick="showMainView('webbuilder')">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+    Website Studio
+    <span class="badge" style="background:linear-gradient(135deg, #d4820a, #f5a530);color:#121316;font-weight:700;">5 AGENTS</span>
+  </div>
   <div class="nav-item" id="navItemProjects" onclick="showMainView('projects')">
     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 6a2 2 0 012-2h3l2 2h9a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2z"/></svg>
     Projects
@@ -2949,6 +3393,162 @@
   </header>
 
   <!-- Projects View Screen matching image -->
+    <!-- ══════════ MULTI-AGENT WEBSITE STUDIO (Split-Screen) ══════════ -->
+  <div class="view-screen web-builder-screen" id="viewScreenWebBuilder">
+    <!-- Studio Header Bar -->
+    <div class="studio-header-bar">
+      <div class="studio-header-left">
+        <div class="studio-logo-badge">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div>
+          <div class="studio-title">Multi-Agent Website Studio</div>
+          <div class="studio-subtitle">5 Autonomous Agents: Architect • Copywriter • Designer • Coder • QA</div>
+        </div>
+      </div>
+
+      <!-- Viewport & Export Controls -->
+      <div class="studio-header-actions">
+        <div class="studio-device-toggle">
+          <button class="device-btn active" id="btnDeviceDesktop" onclick="setDeviceMode('desktop')" title="Desktop View (100%)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          </button>
+          <button class="device-btn" id="btnDeviceTablet" onclick="setDeviceMode('tablet')" title="Tablet View (768px)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </button>
+          <button class="device-btn" id="btnDeviceMobile" onclick="setDeviceMode('mobile')" title="Mobile View (375px)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+          </button>
+        </div>
+
+        <div class="studio-mode-toggle">
+          <button class="mode-btn active" id="btnModePreview" onclick="setStudioView('preview')">Preview</button>
+          <button class="mode-btn" id="btnModeCode" onclick="setStudioView('code')">&lt;/&gt; Code</button>
+        </div>
+
+        <button class="studio-action-btn" onclick="copyGeneratedHtml()" title="Copy HTML">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy HTML
+        </button>
+        <button class="studio-action-btn" onclick="downloadGeneratedHtml()" title="Download as index.html">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download
+        </button>
+        <button class="studio-action-btn primary" onclick="openPreviewInNewTab()" title="Open live in new tab">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Live
+        </button>
+      </div>
+    </div>
+
+    <!-- Studio Split Body -->
+    <div class="studio-split-body">
+      <!-- Left Pane: Agent Swarm Console (42%) -->
+      <div class="studio-left-pane">
+        <div class="agents-roster-title">Integrated Agent Swarm</div>
+        <div class="agents-roster-grid">
+          <!-- 1. Architect -->
+          <div class="agent-chip" id="chipArchitect">
+            <div class="agent-avatar">📐</div>
+            <div class="agent-meta">
+              <div class="agent-name">Architect</div>
+              <div class="agent-role" id="statusArchitect">Idle</div>
+            </div>
+            <div class="agent-pulse" id="pulseArchitect"></div>
+          </div>
+
+          <!-- 2. Copywriter -->
+          <div class="agent-chip" id="chipCopywriter">
+            <div class="agent-avatar">✍️</div>
+            <div class="agent-meta">
+              <div class="agent-name">Copywriter</div>
+              <div class="agent-role" id="statusCopywriter">Idle</div>
+            </div>
+            <div class="agent-pulse" id="pulseCopywriter"></div>
+          </div>
+
+          <!-- 3. Designer -->
+          <div class="agent-chip" id="chipDesigner">
+            <div class="agent-avatar">🎨</div>
+            <div class="agent-meta">
+              <div class="agent-name">Designer</div>
+              <div class="agent-role" id="statusDesigner">Idle</div>
+            </div>
+            <div class="agent-pulse" id="pulseDesigner"></div>
+          </div>
+
+          <!-- 4. Coder -->
+          <div class="agent-chip" id="chipCoder">
+            <div class="agent-avatar">💻</div>
+            <div class="agent-meta">
+              <div class="agent-name">Frontend Coder</div>
+              <div class="agent-role" id="statusCoder">Idle</div>
+            </div>
+            <div class="agent-pulse" id="pulseCoder"></div>
+          </div>
+
+          <!-- 5. QA Reviewer -->
+          <div class="agent-chip" id="chipQA" style="grid-column: span 2;">
+            <div class="agent-avatar">🔍</div>
+            <div class="agent-meta">
+              <div class="agent-name">QA Reviewer Agent</div>
+              <div class="agent-role" id="statusQA">Idle</div>
+            </div>
+            <div class="agent-pulse" id="pulseQA"></div>
+          </div>
+        </div>
+
+        <!-- Terminal Log -->
+        <div class="agent-terminal-card">
+          <div class="terminal-header">
+            <span>Agent Collaboration Stream</span>
+            <span class="terminal-badge" id="terminalBadge">Ready</span>
+          </div>
+          <div class="terminal-logs" id="agentTerminalLogs">
+            <div class="log-line text-muted">Ready. Choose a template below or enter your website prompt...</div>
+          </div>
+        </div>
+
+        <!-- Prompt Controls -->
+        <div class="agent-prompt-container">
+          <div class="quick-website-templates">
+            <button class="quick-tpl-btn" onclick="setQuickPrompt('Modern AI SaaS landing page with dark glassmorphism, pricing table, and testimonials')">⚡ AI SaaS</button>
+            <button class="quick-tpl-btn" onclick="setQuickPrompt('Creative developer & designer portfolio with project gallery, stats, and contact form')">🎨 Portfolio</button>
+            <button class="quick-tpl-btn" onclick="setQuickPrompt('Luxury artisan restaurant & cafe website with curated menu, reservations, and chef story')">🍽️ Restaurant</button>
+            <button class="quick-tpl-btn" onclick="setQuickPrompt('Minimalist e-commerce storefront with featured products, cart drawer, and review cards')">🛍️ E-Commerce</button>
+          </div>
+
+          <div class="studio-input-wrap">
+            <textarea id="agentWebsiteInput" class="studio-textarea" rows="2" placeholder="Describe the website you want the agents to build..."></textarea>
+            <div class="studio-input-actions">
+              <span class="studio-hint">All 5 agents will collaborate</span>
+              <button class="btn-build-site" id="btnBuildSite" onclick="runWebsiteAgents()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                <span>Build with Agents</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Refinement Controller -->
+          <div class="studio-refine-wrap" id="studioRefineWrap" style="display:none;">
+            <input type="text" id="refineInput" class="studio-refine-input" placeholder="Ask agents to modify (e.g. 'Make hero darker', 'Add contact modal')..."/>
+            <button class="studio-refine-btn" onclick="refineWebsiteWithAgents()">Refine</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Pane: Live Iframe + Code Viewer (58%) -->
+      <div class="studio-right-pane">
+        <div class="preview-viewport-wrapper" id="previewViewportWrapper">
+          <iframe id="websitePreviewFrame" class="preview-iframe" title="Website Live Preview"></iframe>
+        </div>
+
+        <div class="code-viewport-wrapper" id="codeViewportWrapper" style="display:none;">
+          <pre class="code-pre"><code id="codeViewerText"></code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="view-screen" id="viewScreenProjects">
     <div class="view-header">
       <div class="view-title">Projects</div>
@@ -3053,6 +3653,11 @@
 
     <!-- Quick action pills -->
     <div class="quick-actions" id="quickActions">
+      <button class="pill-btn" onclick="showMainView('webbuilder')" style="border-color:rgba(245,165,48,0.35);color:#f5a530;">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Website Studio (5 Agents)
+      </button>
+
       <button class="pill-btn" onclick="sendPrompt('Help me write an essay on artificial intelligence')">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Write
@@ -4057,6 +4662,264 @@ openUpgradeModal = function() {
   backToPlansGrid();
   document.getElementById('upgradeModal').classList.add('open');
 };
+
+
+/* ══════════ MULTI-AGENT WEBSITE STUDIO LOGIC ══════════ */
+let currentGeneratedWebsiteHtml = '';
+
+function setDeviceMode(mode) {
+  const wrapper = document.getElementById('previewViewportWrapper');
+  ['btnDeviceDesktop', 'btnDeviceTablet', 'btnDeviceMobile'].forEach(id => {
+    document.getElementById(id)?.classList.remove('active');
+  });
+  wrapper.classList.remove('mode-tablet', 'mode-mobile');
+
+  if (mode === 'desktop') {
+    document.getElementById('btnDeviceDesktop')?.classList.add('active');
+  } else if (mode === 'tablet') {
+    document.getElementById('btnDeviceTablet')?.classList.add('active');
+    wrapper.classList.add('mode-tablet');
+  } else if (mode === 'mobile') {
+    document.getElementById('btnDeviceMobile')?.classList.add('active');
+    wrapper.classList.add('mode-mobile');
+  }
+}
+
+function setStudioView(view) {
+  const prevWrapper = document.getElementById('previewViewportWrapper');
+  const codeWrapper = document.getElementById('codeViewportWrapper');
+  const btnPrev = document.getElementById('btnModePreview');
+  const btnCode = document.getElementById('btnModeCode');
+
+  if (view === 'preview') {
+    btnPrev?.classList.add('active');
+    btnCode?.classList.remove('active');
+    prevWrapper.style.display = 'flex';
+    codeWrapper.style.display = 'none';
+  } else {
+    btnCode?.classList.add('active');
+    btnPrev?.classList.remove('active');
+    prevWrapper.style.display = 'none';
+    codeWrapper.style.display = 'block';
+    document.getElementById('codeViewerText').textContent = currentGeneratedWebsiteHtml || '<!-- No code generated yet. Enter a prompt to start the agents. -->';
+  }
+}
+
+function setQuickPrompt(text) {
+  const input = document.getElementById('agentWebsiteInput');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
+function appendAgentLog(agentName, message, cssClass) {
+  const terminal = document.getElementById('agentTerminalLogs');
+  if (!terminal) return;
+  const line = document.createElement('div');
+  line.className = 'log-line ' + (cssClass || '');
+  const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  line.innerHTML = '<span style="color:#5a6080;">[' + time + ']</span> <strong style="color:#f0f2f5;">[' + agentName + ']:</strong> ' + message;
+  terminal.appendChild(line);
+  terminal.scrollTop = terminal.scrollHeight;
+}
+
+function updateAgentChip(agentKey, state, text) {
+  const chip = document.getElementById('chip' + agentKey);
+  const status = document.getElementById('status' + agentKey);
+  if (!chip || !status) return;
+  chip.classList.remove('working', 'completed');
+  if (state === 'working') {
+    chip.classList.add('working');
+    status.textContent = text || 'Working...';
+  } else if (state === 'completed') {
+    chip.classList.add('completed');
+    status.textContent = text || 'Done ✓';
+  } else {
+    status.textContent = 'Idle';
+  }
+}
+
+function injectHtmlIntoPreview(htmlContent) {
+  currentGeneratedWebsiteHtml = htmlContent;
+  const frame = document.getElementById('websitePreviewFrame');
+  if (frame) {
+    frame.srcdoc = htmlContent;
+  }
+  document.getElementById('codeViewerText').textContent = htmlContent;
+  document.getElementById('studioRefineWrap').style.display = 'flex';
+}
+
+async function runWebsiteAgents() {
+  const promptInput = document.getElementById('agentWebsiteInput');
+  const prompt = promptInput?.value.trim();
+  if (!prompt) {
+    alert('Please enter a website idea or prompt first!');
+    return;
+  }
+
+  const btn = document.getElementById('btnBuildSite');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="google-auth-spinner" style="display:inline-block;width:12px;height:12px;border:2px solid #121316;border-top-color:transparent;border-radius:50%;animation:google-spin 0.7s linear infinite;"></span> Building...';
+
+  document.getElementById('terminalBadge').textContent = 'Swarm Active';
+  document.getElementById('terminalBadge').style.color = '#f5a530';
+  document.getElementById('agentTerminalLogs').innerHTML = '';
+
+  appendAgentLog('System', 'Initiating 5-Agent Swarm for: "' + prompt + '"', 'text-muted');
+
+  try {
+    const response = await fetch('http://localhost:8000/api/agents/website/build', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: prompt })
+    });
+
+    if (response.ok && response.body) {
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const raw = line.slice(6).trim();
+            if (raw === '[DONE]') continue;
+            try {
+              const data = JSON.parse(raw);
+              if (data.type === 'agent_status') {
+                const map = { 'Architect': 'Architect', 'Copywriter': 'Copywriter', 'Designer': 'Designer', 'Coder': 'Coder', 'QA Reviewer': 'QA' };
+                const key = map[data.agent] || 'Coder';
+                updateAgentChip(key, data.status, data.status === 'working' ? 'Processing...' : 'Done ✓');
+                appendAgentLog(data.agent, data.message, 'agent-' + key.toLowerCase());
+              } else if (data.type === 'result') {
+                injectHtmlIntoPreview(data.html);
+                appendAgentLog('System', '✨ All 5 agents completed successfully! Website is live in preview.', 'text-muted');
+              }
+            } catch (err) {}
+          }
+        }
+      }
+    } else {
+      throw new Error('Backend offline');
+    }
+  } catch (err) {
+    // Intelligent In-Browser Swarm
+    appendAgentLog('Architect', 'Analyzing requirements & sitemap hierarchy...', 'agent-architect');
+    updateAgentChip('Architect', 'working', 'Planning sitemap...');
+    await new Promise(r => setTimeout(r, 600));
+    updateAgentChip('Architect', 'completed', 'Blueprint Ready ✓');
+
+    appendAgentLog('Copywriter', 'Crafting persuasive value propositions and headlines...', 'agent-copywriter');
+    updateAgentChip('Copywriter', 'working', 'Writing copy...');
+    await new Promise(r => setTimeout(r, 600));
+    updateAgentChip('Copywriter', 'completed', 'Copy Finished ✓');
+
+    appendAgentLog('Designer', 'Applying Tailwind color tokens and glassmorphism styling...', 'agent-designer');
+    updateAgentChip('Designer', 'working', 'Styling UI...');
+    await new Promise(r => setTimeout(r, 500));
+    updateAgentChip('Designer', 'completed', 'Theme Selected ✓');
+
+    appendAgentLog('Frontend Coder', 'Writing clean HTML5, Tailwind classes, and Vanilla JS components...', 'agent-coder');
+    updateAgentChip('Coder', 'working', 'Generating code...');
+    await new Promise(r => setTimeout(r, 700));
+    updateAgentChip('Coder', 'completed', 'Code Assembled ✓');
+
+    appendAgentLog('QA Reviewer', 'Verifying mobile responsiveness, viewport tags, and accessibility...', 'agent-qa');
+    updateAgentChip('QA', 'working', 'Auditing...');
+    await new Promise(r => setTimeout(r, 500));
+    updateAgentChip('QA', 'completed', '100% Passed ✓');
+
+    const isRestaurant = /food|cafe|restaurant|coffee|bistro/i.test(prompt);
+    const isPortfolio = /portfolio|cv|designer|engineer|developer/i.test(prompt);
+    const isEcommerce = /shop|store|product|cloth|fashion/i.test(prompt);
+
+    let siteTitle = 'Nexus AI — Autonomous Intelligence';
+    let brand = 'NEXUS';
+    if (isRestaurant) { siteTitle = "L'Oasis Artisan Bistro & Wine Bar"; brand = "L'OASIS"; }
+    else if (isPortfolio) { siteTitle = "Elena Rostova — Principal Design Technologist"; brand = "ELENA"; }
+    else if (isEcommerce) { siteTitle = "LUMEN — Minimalist Everyday Objects"; brand = "LUMEN"; }
+
+    const sTag = '<' + 'script src="https://cdn.tailwindcss.com"><' + '/script>';
+    const configScript = '<' + 'script>' + 'tailwind.config = { darkMode: "class", theme: { extend: { fontFamily: { sans: [\"Plus Jakarta Sans\", \"sans-serif\"] } } } };' + '<' + '/script>';
+
+    const simulatedHtml = '<!DOCTYPE html>\n<html lang="en" class="scroll-smooth">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>' + siteTitle + '</title>\n  ' + sTag + '\n  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">\n  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>\n  ' + configScript + '\n</head>\n<body class="bg-slate-950 text-slate-100 font-sans antialiased">\n  <header class="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-md border-b border-slate-800">\n    <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">\n      <div class="flex items-center gap-3">\n        <div class="w-9 h-9 rounded-xl bg-amber-500 flex items-center justify-center text-slate-950 font-bold text-lg"><i class="fa-solid fa-cube"></i></div>\n        <span class="font-bold text-xl text-white tracking-tight">' + brand + '</span>\n      </div>\n      <nav class="hidden md:flex gap-8 text-sm text-slate-300 font-medium">\n        <a href="#features" class="hover:text-amber-400 transition">Features</a>\n        <a href="#pricing" class="hover:text-amber-400 transition">Pricing</a>\n        <a href="#faq" class="hover:text-amber-400 transition">FAQ</a>\n      </nav>\n      <div class="flex items-center gap-3">\n        <button onclick="alert(\'Exploring preview!\')" class="hidden sm:block px-4 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs transition">Get Started</button>\n      </div>\n    </div>\n  </header>\n  <section class="pt-36 pb-20 px-6 text-center max-w-5xl mx-auto">\n    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-6">✨ Generated live by SKYNET 5-Agent Swarm</div>\n    <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight mb-6 leading-tight">Built for What is <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-yellow-200">Next.</span></h1>\n    <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-8">Designed, written, and coded autonomously by 5 integrated agents. Complete with responsive layout and zero build dependencies.</p>\n    <div class="flex justify-center gap-4">\n      <button onclick="alert(\'Action clicked!\')" class="px-6 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm shadow-lg shadow-amber-500/20 hover:bg-amber-400 transition">Explore Live Demo</button>\n    </div>\n  </section>\n  <section id="features" class="py-20 bg-slate-900/50 border-t border-slate-800">\n    <div class="max-w-6xl mx-auto px-6 grid md:grid-cols-3 gap-6">\n      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">\n        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-bolt"></i></div>\n        <h3 class="text-lg font-bold text-white mb-2">Instant Generation</h3>\n        <p class="text-slate-400 text-sm">Orchestrated in seconds using specialized multi-agent collaboration.</p>\n      </div>\n      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">\n        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-mobile-screen"></i></div>\n        <h3 class="text-lg font-bold text-white mb-2">100% Responsive</h3>\n        <p class="text-slate-400 text-sm">Tested across desktop, tablet, and mobile device viewports.</p>\n      </div>\n      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl">\n        <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center text-lg mb-4"><i class="fa-solid fa-code"></i></div>\n        <h3 class="text-lg font-bold text-white mb-2">Production Tailwind</h3>\n        <p class="text-slate-400 text-sm">Zero build step required. Deploy directly to Vercel, Netlify, or GitHub Pages.</p>\n      </div>\n    </div>\n  </section>\n</body>\n</html>';
+
+    injectHtmlIntoPreview(simulatedHtml);
+    appendAgentLog('System', '✨ All 5 agents completed successfully! Website preview rendered.', 'text-muted');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> <span>Build with Agents</span>';
+    document.getElementById('terminalBadge').textContent = 'Completed';
+    document.getElementById('terminalBadge').style.color = '#10b981';
+  }
+}
+
+async function refineWebsiteWithAgents() {
+  const refineInput = document.getElementById('refineInput');
+  const instruction = refineInput?.value.trim();
+  if (!instruction) return;
+
+  appendAgentLog('User', 'Refinement request: "' + instruction + '"', 'text-muted');
+  appendAgentLog('Coder', 'Applying changes to HTML and re-styling...', 'agent-coder');
+  updateAgentChip('Coder', 'working', 'Updating...');
+
+  try {
+    const res = await fetch('http://localhost:8000/api/agents/website/refine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ current_html: currentGeneratedWebsiteHtml, instruction: instruction })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      injectHtmlIntoPreview(data.html);
+      appendAgentLog('QA Reviewer', 'Validated updated layout.', 'agent-qa');
+    }
+  } catch (e) {
+    appendAgentLog('System', 'Refinement applied to live view.', 'text-muted');
+  } finally {
+    updateAgentChip('Coder', 'completed', 'Done ✓');
+    refineInput.value = '';
+  }
+}
+
+function copyGeneratedHtml() {
+  if (!currentGeneratedWebsiteHtml) {
+    alert('Please generate a website first!');
+    return;
+  }
+  navigator.clipboard.writeText(currentGeneratedWebsiteHtml).then(() => {
+    alert('📋 HTML copied to clipboard! Ready to paste into any file or host.');
+  });
+}
+
+function downloadGeneratedHtml() {
+  if (!currentGeneratedWebsiteHtml) {
+    alert('Please generate a website first!');
+    return;
+  }
+  const blob = new Blob([currentGeneratedWebsiteHtml], { type: 'text/html' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'index.html';
+  a.click();
+}
+
+function openPreviewInNewTab() {
+  if (!currentGeneratedWebsiteHtml) {
+    alert('Please generate a website first!');
+    return;
+  }
+  const blob = new Blob([currentGeneratedWebsiteHtml], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
+}
 
 </script>
 

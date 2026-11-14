@@ -9,16 +9,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.database import init_db
 from app.core.mongo import close_mongo
-from app.api import auth, chat, conversations, billing, users
+from app.api import auth, chat, conversations, billing, users, agents
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # ── Startup ─────────────────────────────────────────
     print("🚀 SKYNET Backend starting up...")
-    await init_db()         # Create PostgreSQL tables
-    print("✅ PostgreSQL tables ready")
+    try:
+        await init_db()         # Create PostgreSQL tables if database accessible
+        print("✅ PostgreSQL tables ready")
+    except Exception as e:
+        print(f"⚠️ PostgreSQL connection deferred: {e}")
     print("✅ MongoDB connection lazy-initialized")
+    print("✅ Multi-Agent Website Builder Team active")
     yield
     # ── Shutdown ─────────────────────────────────────────
     await close_mongo()
@@ -29,8 +33,9 @@ app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description=(
-        "SKYNET AI backend — Powers chat (Gemini), authentication (Google OAuth2 + Email), "
-        "conversation history (PostgreSQL + MongoDB), and billing/subscription management."
+        "SKYNET AI backend — Powers chat (Gemini), Multi-Agent Website Builder Studio, "
+        "authentication (Google OAuth2 + Email), conversation history (PostgreSQL + MongoDB), "
+        "and billing/subscription management."
     ),
     lifespan=lifespan,
     docs_url="/docs",
@@ -52,6 +57,7 @@ app.include_router(chat.router,          prefix="/api")
 app.include_router(conversations.router, prefix="/api")
 app.include_router(billing.router,       prefix="/api")
 app.include_router(users.router,         prefix="/api")
+app.include_router(agents.router,        prefix="/api")
 
 
 @app.get("/", tags=["Health"])
